@@ -5,29 +5,44 @@
 int N,r,c;
 int ans = 0;
 
-void Z(int x, int y, int size)
-{
-	if (size == 1)
-	{
-		if (x==r && y==c)
-			printf("%d\n", ans);
-		ans++;
-		return;		
-	}
-
-	int s = size/2;
-
-	Z(x,y,s);
-	Z(x,y+s,s);
-	Z(x+s,y,s);
-	Z(x+s,y+s,s);
-}
-
 int main()
 {
 	scanf("%d %d %d", &N, &r, &c);
 	
-	Z(0,0,pow(2,N));
+	int n = pow(2,N);
+	int x = 0, y = 0;
+
+	while (n > 0)
+	{
+		n /= 2;
+
+		// 2 사분면
+		if (r < x+n && c < y+n) ans += n*n*0;
+		// 1 사분면
+		else if (r < x+n) 
+		{
+			ans += n*n*1;
+			y += n;
+		}
+		// 3 사분면
+		else if (c < y+n)
+		{
+			ans += n*n*2;
+			x += n;
+		}
+		else
+		{
+			ans += n*n*3;
+			x += n;
+			y += n;
+		}
+
+		if (n == 1)
+		{
+			printf("%d\n", ans);
+			break;
+		}
+	}
 
 	return 0;
 }
