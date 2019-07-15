@@ -1,47 +1,29 @@
 // https://www.acmicpc.net/problem/1912
-#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <vector>
 
 using namespace std;
 
-int N, sequence[100001], DP[100000], M=-1000;
-
 int main()
 {
-	ios::sync_with_stdio(false), cin.tie(0);
+	int N, MAX=-1000;
+	scanf("%d", &N);
+	vector<int> c(N, 0);
+	vector<int> d(N, 0);
 
-	cin >> N;
-	for (int i=1; i<=N; i++)
-		cin >> sequence[i];
+	for (int i=0; i<N; i++)
+		scanf("%d", &c[i]);	
+	
+	d[0] = c[0];
 
-	for (int i=1; i<=N; i++)
+	for (int i=1; i<N; i++)
 	{
-		if (i == 1)
-		{
-			for (int a=1; a<=N; a++)
-			{
-				DP[a] = sequence[a];
-				if (DP[a] > M) M = DP[a];	
-			}
-		}
-		else if (i == 2)
-		{
-			for (int j=1; j<=N-1; j++)
-			{
-				DP[j] = sequence[j] + sequence[j+1];	
-				if (DP[j] > M) M = DP[j];
-			}
-		}
-		else
-		{
-			for (int bundle=i, h=1; bundle<=N; bundle++, h++)
-			{
-				DP[h] = DP[h] + sequence[bundle];
-				if (DP[h] > M) M = DP[h];
-			}
-		}	
+		d[i] = max(d[i-1] + c[i], c[i]);
+		MAX = max(MAX, d[i]);
 	}
 
-	cout << M << '\n';
-
+	MAX = max(MAX, d[0]);
+	printf("%d\n", MAX);
 	return 0;
 }
